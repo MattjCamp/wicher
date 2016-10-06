@@ -9,39 +9,191 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction
+## Introduction
 
 `wicher` is a package used to make working with the WICHE enrollment
 projections easier in R. We generally use WICHE enrollments to figure
-out participation rates for us states. You can also use WICHE to visualize
-demographics.
+out the percentage of students who participate in our assessments.
 
-## WICHE Datasets
+We also use WICHE to visualize demographics in our Excel dashboards so I'm
+putting some examples of visualizing in R below. I think this might make it
+easier to prototype the graphics before trying to work them into the dashboard.
 
+### Installing WICHE R Package
 
+You can install `wicher` from my github repository like
+this:
+
+``` r
+
+# MAKE SURE YOU HAVE DEVTOOLS INSTALLED
+# AND REFERENCED
+
+install.packages("devtools")
+library(devtools)
+
+# USE DEVTOOLS TO INSTALL THE WICHE PACKAGE ALONG
+# WITH CODERR (WICHE USES THIS PACKAGE)
+
+install_github('mattjcamp/coderr','mattjcamp')
+install_github('mattjcamp/wicher','mattjcamp')
+
+# REFERENCE GGPLOT2
+
+install.packages("ggplot2")
+library(ggplot2)
+
+# REFERENCE WICHE PACKAGE FOR REST OF ANALYSIS
+
+library(wicher)
+
+```
+
+You will need to install the packages above if you want to reproduce 
+these examples.
+
+### Datasets Included in WICHE R Package
+
+Today, there is only one dataset in this package: `wiche_2013`. This is the
+source that I've used for a bunch of cohort analysis over the past two years.
+
+Here is what the table looks like:
 
 ```{r warning = FALSE, message = FALSE, echo = TRUE}
 
 library(wicher)
 
-enrollments <- lookup_wiche(year = 2012:2016, gender = c("f", "m"))
+head(wiche_2013)
 
 ```
 
-`r knitr::kable(enrollments)` 
+>**NOTE** As soon as the new projections are available, we will be making a new 
+dataset for 2016.
+
+Usually I use this dataframe to `JOIN` to assessment 
+data aggregated by state and year to get participation rates, but sometimes 
+you may want to just lookup a few datapoints.
+
+### Enrollment Lookups
+
+Use the function `lookup_wiche` to look up specific enrollment information.
+You can specify filters for `location`, `sector`, `race`, `gender`, `grade` and
+`year`. For example, if you want to see enrollments for 2012 to 2016 for males
+and females you would do this:
 
 ```{r warning = FALSE, message = FALSE, echo = TRUE}
 
+lookup_wiche(year = 2012:2016,
+             gender = c("f", "m"))
+
+```
+
+The paramaters all have defaults and since you didn't specify
+`location` the output defaulted to **us** for United States.
+To see the same thing but for Pennsylvania and New York you 
+would do this:
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+lookup_wiche(location = c("pa","ny"),
+             year = 2012:2016,
+             gender = c("f", "m"))
+
+```
+
+### Simple Visualizations
+
+So I just started adding visualizations using R since we 
+mostly use Excel to produce graphics. Still, it's nice to 
+visualize data right in R while we are doing analysis. When I'm
+not too worried about the appearence of the graphics I just use
+`qplot` (as in *quick* plot). This is part of `ggplot2` that 
+we added at the top of this doc.
+
+#### Showing Trends
+
+Here is how to do a quick line plot to show trends. So I pulled the
+enrollments for White and Hispanic students in California for the
+years 2000 to 2010. Then I used `qplot` to make a chart that would 
+show the trend in enrollments for these two groups.
+
+```{r fig.width = 7, fig.height = 4, echo = TRUE}
+
 library(ggplot2)
 
-enrollments <- lookup_wiche(year = 2006:2026, gender = c("f", "m"))
+enrollments <- lookup_wiche(year = 2000:2010,
+                            location = "ca",
+                            race = c("white", "hispanic"))
 
 qplot(year, n, data = enrollments, 
-      color = gender, 
+      color = race, 
       geom = c("point", "smooth"),
-      main = "WICHE Projections",
+      main = "California Enrollment",
       xlab = "Academic Year", 
-      ylab = "Projection")
+      ylab = "Enrollment")
 
 ```      
 
+I choose these data points because I knew from our previous analysis that they
+would show an interesting trend.
+
+>**NOTE** I found that these plots look terrible unless you set the right
+figure dimensions in the markdown code. Look at the code file to see how this is
+done.
+
+Here is the same thing but using the full `ggplot` function:
+
+```{r fig.width = 7, fig.height = 4, echo = TRUE}
+
+ggplot(enrollments, aes(x = as.character(year), y = n, group = race)) +
+  geom_smooth(aes(color = race)) +
+  geom_point(aes(color = race)) + 
+  ggtitle("California Enrollment") +
+  labs(x = "Academic Year", y = "Enrollment")
+
+```      
+
+>**NOTE** I'm putting this here as a reference for when we want something
+like this and we want to control the output.
+
+#### Comparing Groups
+
+Here is an example of using column charts to compare groups. We will look again
+at California at the beginning and the end of the trend examined above.
+
+First, make the chart for 2000:
+
+```{r fig.width = 7, fig.height = 4, echo = TRUE}
+
+enrollments <- lookup_wiche(year = 2000,
+                            location = "ca",
+                            race = c("white", "asian", "hispanic", "native", "black"))
+
+ggplot(data = enrollments, aes(race, n)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  ggtitle("California Enrollment (2000)") +
+  labs(x = "Academic Year", y = "Enrollment")
+
+```
+
+Now, do the same thing for 2010:
+
+```{r fig.width = 7, fig.height = 4, echo = TRUE}
+
+enrollments <- lookup_wiche(year = 2010,
+                            location = "ca",
+                            race = c("white", "asian", "hispanic", "native", "black"))
+
+ggplot(data = enrollments, aes(race, n)) + 
+  geom_bar(stat = "identity", position = "dodge") + 
+  ggtitle("California Enrollment (2010)") +
+  labs(x = "Academic Year", y = "Enrollment")
+
+```
+
+## Next Steps
+
+- Add 2016 enrollment projections to package
+- Add geographic visualization templates
+- Prototype new visualizations for the dashboard
+- Add 2008 projections since some of the research I've seeing is referencing projections back to 1992
