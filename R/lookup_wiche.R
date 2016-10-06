@@ -49,7 +49,7 @@ lookup_wiche <- function(location = "us",
   year <- sprintf("year IN %s",
                    code_vector_to_csv_list(year, add.quotes = FALSE, enclose.in.parenthesis = TRUE))
 
-  sql <- code_sql_select(table_or_sql = "wiche",
+  sql <- code_sql_select(table_or_sql = "wiche_2013",
                          select.cols = "*",
                          filters = c(location,sector,race,gender,grade,year))
 

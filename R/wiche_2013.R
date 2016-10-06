@@ -1,4 +1,4 @@
-#' WICHE Projections
+#' WICHE Projections (2013)
 #'
 #'  High school graduate forecasts from The Western Interstate Commission for Higher Education (WICHE)
 #'
@@ -13,7 +13,7 @@
 #' }
 #' @source {http://www.wiche.edu/knocking-8th}
 #' @examples
-#' head(wiche)
+#' head(wiche_2013)
 #'   location sector  race     grade year    n
 #' 1       in public asian         8 2021 2306
 #' 2       in public asian         9 2021 2407
@@ -21,4 +21,4 @@
 #' 4       in public asian        11 2021 2801
 #' 5       in public asian        12 2021 2578
 #' 6       in public asian graduates 2021 2201
-"wiche"
+"wiche_2013"
