@@ -1,0 +1,52 @@
+---
+title: "Install Package Resources"
+output:
+  html_document:
+    css: ../style.css
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+# Build Datasets
+
+Save the dataset as an R dataframe and an SQLite database. Install
+both into the `wicher` package.
+
+Install the dataset:
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+library(devtools)
+
+wiche_graduate_projections <- w
+
+use_data(wiche_graduate_projections,
+         overwrite = TRUE)
+
+```
+
+Build and save the database:
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+library(dbr)
+
+db_file <- system.file("wicher",
+                       "wiche_graduate_projections.db",
+                       package = "wicher")
+conn <- init_sqlite(db_file)
+
+post_data(df = wiche_graduate_projections,
+          table_name = "wiche_graduate_projections",
+          conn = conn)
+
+```
+
+# Install Vignettes
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+devtools::use_vignette("wiche-r-package")
+
+```

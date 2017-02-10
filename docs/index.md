@@ -1,3 +1,0 @@
-# Wiche R
-
-Test

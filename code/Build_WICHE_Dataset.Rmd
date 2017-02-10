@@ -1,0 +1,199 @@
+---
+title: "Build WICHE Graduate Projections Dataset"
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+# WICHE Raw Projections
+
+This document shows how the dataset used in `wicher` was created. The raw data 
+can be located on the WICHE [*Knocking at the College Door*](http://knocking.wiche.edu/data) website:
+
+[http://knocking.wiche.edu/data](http://knocking.wiche.edu/data)
+
+# Get and Clean the WICHE Projections
+
+## Download WICHE Spreadsheet
+
+The raw data for the WICHE graduate is in an Excel workbook. Download this
+workbook first:
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+library(tidyverse)
+library(stringr)
+library(datapointsr)
+
+download.file(url = "http://knocking.wiche.edu/s/All-Enrollment-and-Graduate-Projections-neh9.xlsx",
+              destfile = "All-Enrollment-and-Graduate-Projections-neh9.xlsx",
+              mode = "wb")
+
+```
+
+Then read in the *Projections* workbook:
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+library(readxl)
+
+w <- read_excel(path = "All-Enrollment-and-Graduate-Projections-neh9.xlsx",
+                sheet = "Projections")
+
+knitr::kable(head(w))
+
+```
+
+## Clean Dataset
+
+Increment the year by 1 to make it *year ending*.  Adapt the
+**TYPE** field and then normalize the whole thing.
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+w <- w[, 1:18]
+
+w <- 
+  w %>% 
+  mutate(STABR = str_to_lower(STABR),
+         TYPE = ifelse(TYPE == "G", "p", TYPE),
+         TYPE = ifelse(TYPE == "NP", "np", TYPE),
+         TYPE = ifelse(TYPE == "AM", "native", TYPE),
+         TYPE = ifelse(TYPE == "AS", "asian", TYPE),
+         TYPE = ifelse(TYPE == "BL", "black", TYPE),
+         TYPE = ifelse(TYPE == "WH", "white", TYPE),
+         TYPE = ifelse(TYPE == "HI", "hispanic", TYPE),
+         TYPE = ifelse(TYPE == "HP", "pacific", TYPE),
+         TYPE = ifelse(TYPE == "TR", "two_more", TYPE),
+         STABR = ifelse(STABR == "_m", "m", STABR),
+         STABR = ifelse(STABR == "_w", "w", STABR),
+         STABR = ifelse(STABR == "_s", "s", STABR),
+         STABR = ifelse(STABR == "_n", "n", STABR),
+         STABR = ifelse(STABR == "_u", "u", STABR),
+         SURVYEAR = SURVYEAR + 1) %>% 
+  filter(STABR != "u") %>% 
+  long(c(1,2,3,17,18)) %>% 
+  mutate(variable = ifelse(variable == "G01", "1", variable),
+         variable = ifelse(variable == "G02", "2", variable),
+         variable = ifelse(variable == "G03", "3", variable),
+         variable = ifelse(variable == "G04", "4", variable),
+         variable = ifelse(variable == "G05", "5", variable),
+         variable = ifelse(variable == "G06", "6", variable),
+         variable = ifelse(variable == "G07", "7", variable),
+         variable = ifelse(variable == "G08", "8", variable),
+         variable = ifelse(variable == "G09", "9", variable),
+         variable = ifelse(variable == "G10", "10", variable),
+         variable = ifelse(variable == "G11", "11", variable),
+         variable = ifelse(variable == "G12", "12", variable),
+         variable = ifelse(variable == "DPL", "g", variable)) %>% 
+  mutate(SURVYEAR = as.integer(SURVYEAR),
+         value = as.integer(value),
+         FLAG_P_G = str_to_lower(FLAG_P_G),
+         FLAG_P_DPL = str_to_lower(FLAG_P_DPL)) %>% 
+  select(location = STABR,
+         year = SURVYEAR,
+         grade = variable,
+         TYPE,
+         FLAG_P_G,
+         FLAG_P_DPL,
+         n = value)
+  
+names(w) <- str_to_lower(names(w))
+
+knitr::kable(head(w))
+
+```
+
+## Calculate Total Group
+
+Calculate the sum of private and public schools
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+w <- 
+  w %>% 
+  filter(type %in% c("p","np")) %>% 
+  group_by(location, year, grade, flag_p_g, flag_p_dpl) %>% 
+  summarise(n = sum(n)) %>% 
+  mutate(type = "all") %>% 
+  select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %>% 
+  bind_rows(w)
+
+```
+
+
+## Calculate United States Totals
+
+We sum these up because we do not use the **Nation* tab that WICHE
+provides to us. We do something similar
+to the last step except that now we roll up location.
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+w <-
+  w %>%
+  filter(!location %in% c("n","s","w","m")) %>% 
+  group_by(year, grade, type, flag_p_g, flag_p_dpl) %>%
+  summarise(n = sum(n)) %>%
+  mutate(location = "us") %>%
+  select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %>%
+  bind_rows(w)
+
+```
+
+## Pull Out Race/Sector
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+w <- 
+  w %>% 
+  ungroup() %>% 
+  mutate(race = ifelse(!type %in% c("all", "p", "np"), type, "all"),
+         sector = ifelse(type %in% c("all", "p", "np"), type, "p")) %>% 
+  select(location, sector, race, grade, year, flag_p_g, flag_p_dpl, n)
+
+```
+
+# Build Datasets
+
+Save the dataset as an R dataframe and an SQLite database. Install
+both into the `wicher` package.
+
+Install the dataset:
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+library(devtools)
+
+wiche_graduate_projections <- 
+  w %>% 
+  ungroup()
+
+use_data(wiche_graduate_projections,
+         overwrite = TRUE)
+
+```
+
+Build and save the database:
+
+```{r warning = FALSE, message = FALSE, echo = TRUE}
+
+library(dbr)
+
+db_file <- system.file("wicher",
+                       "wiche_graduate_projections.db",
+                       package = "wicher")
+conn <- init_sqlite()
+
+drop_table(table_to_delete = "wiche_graduate_projections",
+           conn = conn)
+
+post_data(df = wiche_graduate_projections,
+          table_name = "wiche_graduate_projections",
+          conn = conn)
+
+close_connection(conn)
+
+```

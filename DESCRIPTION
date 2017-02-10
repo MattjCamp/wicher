@@ -2,19 +2,13 @@ Package: wicher
 Type: Package
 Title: High school graduate forecasts from The Western Interstate Commission for
     Higher Education (WICHE) for R
-Version: 0.2.1
+Version: 1.0.0
 Author: Matt Campbell
 Maintainer: Who to complain to <mcampbell@collegeboard.org>
 Description: This contains the WICHE projects in an easy to use format in R.
-    The package includes lookup functions and a dataframe that you can join to state
-    level datasets.
+    The package includes a dataframe that you can join to state level datasets.
 License: None
 LazyData: TRUE
-Imports:
-    coderr,
-    sqldf,
-    stringr
 RoxygenNote: 5.0.1
-Suggests: knitr,
-    rmarkdown
+Suggests: knitr, rmarkdown, dbr, datapointsr
 VignetteBuilder: knitr
