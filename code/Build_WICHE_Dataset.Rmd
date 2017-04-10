@@ -42,8 +42,6 @@ library(readxl)
 w <- read_excel(path = "All-Enrollment-and-Graduate-Projections-neh9.xlsx",
                 sheet = "Projections")
 
-knitr::kable(head(w))
-
 ```
 
 ## Clean Dataset
@@ -89,7 +87,7 @@ w <-
          variable = ifelse(variable == "G12", "12", variable),
          variable = ifelse(variable == "DPL", "g", variable)) %>% 
   mutate(SURVYEAR = as.integer(SURVYEAR),
-         value = as.integer(value),
+         value = as.integer(round(value)),
          FLAG_P_G = str_to_lower(FLAG_P_G),
          FLAG_P_DPL = str_to_lower(FLAG_P_DPL)) %>% 
   select(location = STABR,
@@ -101,8 +99,6 @@ w <-
          n = value)
   
 names(w) <- str_to_lower(names(w))
-
-knitr::kable(head(w))
 
 ```
 
@@ -116,13 +112,12 @@ w <-
   w %>% 
   filter(type %in% c("p","np")) %>% 
   group_by(location, year, grade, flag_p_g, flag_p_dpl) %>% 
-  summarise(n = sum(n)) %>% 
+  summarise(n = sum(n, na.rm = TRUE)) %>% 
   mutate(type = "all") %>% 
   select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %>% 
   bind_rows(w)
 
 ```
-
 
 ## Calculate United States Totals
 
@@ -136,7 +131,7 @@ w <-
   w %>%
   filter(!location %in% c("n","s","w","m")) %>% 
   group_by(year, grade, type, flag_p_g, flag_p_dpl) %>%
-  summarise(n = sum(n)) %>%
+  summarise(n = sum(n, na.rm = TRUE)) %>%
   mutate(location = "us") %>%
   select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %>%
   bind_rows(w)

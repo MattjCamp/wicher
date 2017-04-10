@@ -154,169 +154,7 @@ download.file(url = &quot;http://knocking.wiche.edu/s/All-Enrollment-and-Graduat
 <pre class="r"><code>library(readxl)
 
 w &lt;- read_excel(path = &quot;All-Enrollment-and-Graduate-Projections-neh9.xlsx&quot;,
-                sheet = &quot;Projections&quot;)
-
-knitr::kable(head(w))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">STABR</th>
-<th align="right">SURVYEAR</th>
-<th align="left">TYPE</th>
-<th align="right">G01</th>
-<th align="right">G02</th>
-<th align="right">G03</th>
-<th align="right">G04</th>
-<th align="right">G05</th>
-<th align="right">G06</th>
-<th align="right">G07</th>
-<th align="right">G08</th>
-<th align="right">G09</th>
-<th align="right">G10</th>
-<th align="right">G11</th>
-<th align="right">G12</th>
-<th align="right">DPL</th>
-<th align="left">FLAG_P_G</th>
-<th align="left">FLAG_P_DPL</th>
-<th align="left">STNAME</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">AL</td>
-<td align="right">2000</td>
-<td align="left">G</td>
-<td align="right">59669</td>
-<td align="right">58887</td>
-<td align="right">59263</td>
-<td align="right">59749</td>
-<td align="right">60123</td>
-<td align="right">58825</td>
-<td align="right">59219</td>
-<td align="right">56951</td>
-<td align="right">60463</td>
-<td align="right">51991</td>
-<td align="right">46392</td>
-<td align="right">42512</td>
-<td align="right">37082</td>
-<td align="left">A</td>
-<td align="left">A</td>
-<td align="left">Alabama</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td align="left">AL</td>
-<td align="right">2001</td>
-<td align="left">G</td>
-<td align="right">58102</td>
-<td align="right">56877</td>
-<td align="right">58654</td>
-<td align="right">58929</td>
-<td align="right">59698</td>
-<td align="right">60546</td>
-<td align="right">60194</td>
-<td align="right">56591</td>
-<td align="right">61038</td>
-<td align="right">51525</td>
-<td align="right">46138</td>
-<td align="right">42909</td>
-<td align="right">35887</td>
-<td align="left">A</td>
-<td align="left">A</td>
-<td align="left">Alabama</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td align="left">AL</td>
-<td align="right">2002</td>
-<td align="left">G</td>
-<td align="right">56904</td>
-<td align="right">55984</td>
-<td align="right">57269</td>
-<td align="right">58690</td>
-<td align="right">59156</td>
-<td align="right">60464</td>
-<td align="right">61950</td>
-<td align="right">57576</td>
-<td align="right">61646</td>
-<td align="right">52543</td>
-<td align="right">46449</td>
-<td align="right">42521</td>
-<td align="right">36741</td>
-<td align="left">A</td>
-<td align="left">A</td>
-<td align="left">Alabama</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td align="left">AL</td>
-<td align="right">2003</td>
-<td align="left">G</td>
-<td align="right">58064</td>
-<td align="right">54935</td>
-<td align="right">56429</td>
-<td align="right">57323</td>
-<td align="right">58853</td>
-<td align="right">59799</td>
-<td align="right">61854</td>
-<td align="right">59663</td>
-<td align="right">62718</td>
-<td align="right">53695</td>
-<td align="right">47489</td>
-<td align="right">42005</td>
-<td align="right">36464</td>
-<td align="left">A</td>
-<td align="left">A</td>
-<td align="left">Alabama</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td align="left">AL</td>
-<td align="right">2004</td>
-<td align="left">G</td>
-<td align="right">58567</td>
-<td align="right">55661</td>
-<td align="right">54954</td>
-<td align="right">56182</td>
-<td align="right">57293</td>
-<td align="right">59406</td>
-<td align="right">61450</td>
-<td align="right">59286</td>
-<td align="right">64569</td>
-<td align="right">53604</td>
-<td align="right">47538</td>
-<td align="right">42672</td>
-<td align="right">37453</td>
-<td align="left">A</td>
-<td align="left">A</td>
-<td align="left">Alabama</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td align="left">AL</td>
-<td align="right">2005</td>
-<td align="left">G</td>
-<td align="right">59756</td>
-<td align="right">57545</td>
-<td align="right">56618</td>
-<td align="right">55919</td>
-<td align="right">57115</td>
-<td align="right">58438</td>
-<td align="right">61130</td>
-<td align="right">59643</td>
-<td align="right">65192</td>
-<td align="right">55492</td>
-<td align="right">48278</td>
-<td align="right">43452</td>
-<td align="right">37918</td>
-<td align="left">A</td>
-<td align="left">A</td>
-<td align="left">Alabama</td>
-<td>NA</td>
-</tr>
-</tbody>
-</table>
+                sheet = &quot;Projections&quot;)</code></pre>
 </div>
 <div id="clean-dataset" class="section level2">
 <h2>Clean Dataset</h2>
@@ -357,7 +195,7 @@ w &lt;-
          variable = ifelse(variable == &quot;G12&quot;, &quot;12&quot;, variable),
          variable = ifelse(variable == &quot;DPL&quot;, &quot;g&quot;, variable)) %&gt;% 
   mutate(SURVYEAR = as.integer(SURVYEAR),
-         value = as.integer(value),
+         value = as.integer(round(value)),
          FLAG_P_G = str_to_lower(FLAG_P_G),
          FLAG_P_DPL = str_to_lower(FLAG_P_DPL)) %&gt;% 
   select(location = STABR,
@@ -368,78 +206,7 @@ w &lt;-
          FLAG_P_DPL,
          n = value)
   
-names(w) &lt;- str_to_lower(names(w))
-
-knitr::kable(head(w))</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">location</th>
-<th align="right">year</th>
-<th align="left">grade</th>
-<th align="left">type</th>
-<th align="left">flag_p_g</th>
-<th align="left">flag_p_dpl</th>
-<th align="right">n</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">al</td>
-<td align="right">2001</td>
-<td align="left">1</td>
-<td align="left">p</td>
-<td align="left">a</td>
-<td align="left">a</td>
-<td align="right">59669</td>
-</tr>
-<tr class="even">
-<td align="left">al</td>
-<td align="right">2002</td>
-<td align="left">1</td>
-<td align="left">p</td>
-<td align="left">a</td>
-<td align="left">a</td>
-<td align="right">58102</td>
-</tr>
-<tr class="odd">
-<td align="left">al</td>
-<td align="right">2003</td>
-<td align="left">1</td>
-<td align="left">p</td>
-<td align="left">a</td>
-<td align="left">a</td>
-<td align="right">56904</td>
-</tr>
-<tr class="even">
-<td align="left">al</td>
-<td align="right">2004</td>
-<td align="left">1</td>
-<td align="left">p</td>
-<td align="left">a</td>
-<td align="left">a</td>
-<td align="right">58064</td>
-</tr>
-<tr class="odd">
-<td align="left">al</td>
-<td align="right">2005</td>
-<td align="left">1</td>
-<td align="left">p</td>
-<td align="left">a</td>
-<td align="left">a</td>
-<td align="right">58567</td>
-</tr>
-<tr class="even">
-<td align="left">al</td>
-<td align="right">2006</td>
-<td align="left">1</td>
-<td align="left">p</td>
-<td align="left">a</td>
-<td align="left">a</td>
-<td align="right">59756</td>
-</tr>
-</tbody>
-</table>
+names(w) &lt;- str_to_lower(names(w))</code></pre>
 </div>
 <div id="calculate-total-group" class="section level2">
 <h2>Calculate Total Group</h2>
@@ -448,7 +215,7 @@ knitr::kable(head(w))</code></pre>
   w %&gt;% 
   filter(type %in% c(&quot;p&quot;,&quot;np&quot;)) %&gt;% 
   group_by(location, year, grade, flag_p_g, flag_p_dpl) %&gt;% 
-  summarise(n = sum(n)) %&gt;% 
+  summarise(n = sum(n, na.rm = TRUE)) %&gt;% 
   mutate(type = &quot;all&quot;) %&gt;% 
   select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %&gt;% 
   bind_rows(w)</code></pre>
@@ -460,7 +227,7 @@ knitr::kable(head(w))</code></pre>
   w %&gt;%
   filter(!location %in% c(&quot;n&quot;,&quot;s&quot;,&quot;w&quot;,&quot;m&quot;)) %&gt;% 
   group_by(year, grade, type, flag_p_g, flag_p_dpl) %&gt;%
-  summarise(n = sum(n)) %&gt;%
+  summarise(n = sum(n, na.rm = TRUE)) %&gt;%
   mutate(location = &quot;us&quot;) %&gt;%
   select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %&gt;%
   bind_rows(w)</code></pre>
@@ -481,7 +248,9 @@ knitr::kable(head(w))</code></pre>
 <p>Install the dataset:</p>
 <pre class="r"><code>library(devtools)
 
-wiche_graduate_projections &lt;- w
+wiche_graduate_projections &lt;- 
+  w %&gt;% 
+  ungroup()
 
 use_data(wiche_graduate_projections,
          overwrite = TRUE)</code></pre>
@@ -491,7 +260,7 @@ use_data(wiche_graduate_projections,
 db_file &lt;- system.file(&quot;wicher&quot;,
                        &quot;wiche_graduate_projections.db&quot;,
                        package = &quot;wicher&quot;)
-conn &lt;- init_sqlite(db_file)
+conn &lt;- init_sqlite()
 
 drop_table(table_to_delete = &quot;wiche_graduate_projections&quot;,
            conn = conn)</code></pre>
