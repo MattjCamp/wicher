@@ -119,7 +119,7 @@ w2 <-
   w1 %>% 
   filter(type %in% c("p","np")) %>% 
   group_by(location, year, grade) %>% 
-  summarise(n = sum(n, na.rm = TRUE),
+  summarise(n = sum(n, na.rm = FALSE),
             actual = min(actual)) %>% 
   mutate(type = "all",
          actual = ifelse(actual == 0, FALSE, TRUE)) %>% 
