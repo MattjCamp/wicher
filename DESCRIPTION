@@ -9,6 +9,6 @@ Description: This contains the WICHE projects in an easy to use format in R.
     The package includes a dataframe that you can join to state level datasets.
 License: None
 LazyData: TRUE
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: knitr, rmarkdown, dbr, datapointsr
 VignetteBuilder: knitr

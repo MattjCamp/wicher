@@ -89,14 +89,20 @@ w1 <-
          variable = ifelse(variable == "DPL", "g", variable)) %>% 
   mutate(SURVYEAR = as.integer(SURVYEAR),
          value = as.integer(round(value)),
-         FLAG_P_G = str_to_lower(FLAG_P_G),
-         FLAG_P_DPL = str_to_lower(FLAG_P_DPL)) %>% 
+         actual = NA,
+         actual = ifelse(variable == "g" & FLAG_P_DPL == "P",
+                         FALSE, actual),
+         actual = ifelse(variable == "g" & FLAG_P_DPL == "A",
+                         TRUE, actual),
+         actual = ifelse(variable != "g" & FLAG_P_G == "P",
+                         FALSE, actual),
+         actual = ifelse(variable != "g" & FLAG_P_G == "A",
+                         TRUE, actual)) %>% 
   select(location = STABR,
          year = SURVYEAR,
          grade = variable,
          TYPE,
-         FLAG_P_G,
-         FLAG_P_DPL,
+         actual,
          n = value)
   
 names(w1) <- str_to_lower(names(w1))
@@ -113,11 +119,11 @@ w2 <-
   w1 %>% 
   filter(type %in% c("p","np")) %>% 
   group_by(location, year, grade) %>% 
-  summarise(n = sum(n, na.rm = TRUE)) %>% 
+  summarise(n = sum(n, na.rm = TRUE),
+            actual = min(actual)) %>% 
   mutate(type = "all",
-         flag_p_g = NA,
-         flag_p_dpl = NA) %>% 
-  select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %>% 
+         actual = ifelse(actual == 0, FALSE, TRUE)) %>% 
+  select(location, year, grade, type, actual,n) %>% 
   bind_rows(w1)
 
 ```
@@ -133,10 +139,10 @@ to the last step except that now we roll up location.
 w3 <-
   w2 %>%
   filter(!location %in% c("n","s","w","m")) %>% 
-  group_by(year, grade, type, flag_p_g, flag_p_dpl) %>%
+  group_by(year, grade, type, actual) %>%
   summarise(n = sum(n, na.rm = TRUE)) %>%
   mutate(location = "us") %>%
-  select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %>%
+  select(location, year, grade, type, actual,n) %>%
   bind_rows(w2)
 
 ```
@@ -150,7 +156,7 @@ w4 <-
   ungroup() %>% 
   mutate(race = ifelse(!type %in% c("all", "p", "np"), type, "all"),
          sector = ifelse(type %in% c("all", "p", "np"), type, "p")) %>% 
-  select(location, sector, race, grade, year, flag_p_g, flag_p_dpl, n)
+  select(location, sector, race, grade, year, actual, n)
 
 ```
 
