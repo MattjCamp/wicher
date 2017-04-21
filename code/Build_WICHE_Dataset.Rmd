@@ -26,10 +26,11 @@ workbook first:
 library(tidyverse)
 library(stringr)
 library(datapointsr)
+library(cohortr)
 
-download.file(url = "http://knocking.wiche.edu/s/All-Enrollment-and-Graduate-Projections-neh9.xlsx",
-              destfile = "All-Enrollment-and-Graduate-Projections-neh9.xlsx",
-              mode = "wb")
+# download.file(url = "http://knocking.wiche.edu/s/All-Enrollment-and-Graduate-Projections-neh9.xlsx",
+#               destfile = "All-Enrollment-and-Graduate-Projections-neh9.xlsx",
+#               mode = "wb")
 
 ```
 
@@ -39,8 +40,8 @@ Then read in the *Projections* workbook:
 
 library(readxl)
 
-w <- read_excel(path = "All-Enrollment-and-Graduate-Projections-neh9.xlsx",
-                sheet = "Projections")
+wb <- read_excel(path = "All-Enrollment-and-Graduate-Projections-neh9.xlsx",
+                 sheet = "Projections")
 
 ```
 
@@ -51,10 +52,10 @@ Increment the year by 1 to make it *year ending*.  Adapt the
 
 ```{r warning = FALSE, message = FALSE, echo = TRUE}
 
-w <- w[, 1:18]
+w1 <- wb[, 1:18]
 
-w <- 
-  w %>% 
+w1 <- 
+  w1 %>% 
   mutate(STABR = str_to_lower(STABR),
          TYPE = ifelse(TYPE == "G", "p", TYPE),
          TYPE = ifelse(TYPE == "NP", "np", TYPE),
@@ -98,7 +99,7 @@ w <-
          FLAG_P_DPL,
          n = value)
   
-names(w) <- str_to_lower(names(w))
+names(w1) <- str_to_lower(names(w1))
 
 ```
 
@@ -108,14 +109,16 @@ Calculate the sum of private and public schools
 
 ```{r warning = FALSE, message = FALSE, echo = TRUE}
 
-w <- 
-  w %>% 
+w2 <- 
+  w1 %>% 
   filter(type %in% c("p","np")) %>% 
-  group_by(location, year, grade, flag_p_g, flag_p_dpl) %>% 
+  group_by(location, year, grade) %>% 
   summarise(n = sum(n, na.rm = TRUE)) %>% 
-  mutate(type = "all") %>% 
+  mutate(type = "all",
+         flag_p_g = NA,
+         flag_p_dpl = NA) %>% 
   select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %>% 
-  bind_rows(w)
+  bind_rows(w1)
 
 ```
 
@@ -127,14 +130,14 @@ to the last step except that now we roll up location.
 
 ```{r warning = FALSE, message = FALSE, echo = TRUE}
 
-w <-
-  w %>%
+w3 <-
+  w2 %>%
   filter(!location %in% c("n","s","w","m")) %>% 
   group_by(year, grade, type, flag_p_g, flag_p_dpl) %>%
   summarise(n = sum(n, na.rm = TRUE)) %>%
   mutate(location = "us") %>%
   select(location, year, grade, type, flag_p_g, flag_p_dpl,n) %>%
-  bind_rows(w)
+  bind_rows(w2)
 
 ```
 
@@ -142,8 +145,8 @@ w <-
 
 ```{r warning = FALSE, message = FALSE, echo = TRUE}
 
-w <- 
-  w %>% 
+w4 <- 
+  w3 %>% 
   ungroup() %>% 
   mutate(race = ifelse(!type %in% c("all", "p", "np"), type, "all"),
          sector = ifelse(type %in% c("all", "p", "np"), type, "p")) %>% 
@@ -163,7 +166,7 @@ Install the dataset:
 library(devtools)
 
 wiche_graduate_projections <- 
-  w %>% 
+  w4 %>% 
   ungroup()
 
 use_data(wiche_graduate_projections,
