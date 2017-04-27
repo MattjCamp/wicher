@@ -3,11 +3,11 @@ library(tidyverse)
 library(dbr)
 library(testthat)
 
-context("INPUT DATA ISSUES")
+context("INPUT DATA PROBLEMS")
 
-test_that("Rounding Works: Dataframe", {
+test_that("ROUNDING - DATAFRAME", {
 
-  w <- wicher::wiche_graduate_projections
+  w <- wicher::wiche_enrollments
 
   d <- w %>% filter(location == "wi", year == 2004,
                     sector == "p", grade == "g",
@@ -17,16 +17,18 @@ test_that("Rounding Works: Dataframe", {
 
 })
 
-test_that("Rounding Works: SQLite Database", {
+test_that("ROUNDING - SQLITE", {
 
   db_file <- system.file("wicher",
-                         "wiche_graduate_projections.db",
+                         "wiche.db",
                          package = "wicher")
   conn <- init_sqlite(db_file)
 
   w <-
-    "select * from wiche_graduate_projections" %>%
+    "select * from enrollments" %>%
     pull_data(conn)
+
+  close_connection(conn)
 
   d <- w %>% filter(location == "wi", year == 2004,
                     sector == "p", grade == "g",

@@ -3,11 +3,11 @@ library(tidyverse)
 library(dbr)
 library(testthat)
 
-context("TEST AGGRAGTED US SHOWS NA AND NOT 0 WHEN NULL")
+context("NA BEING HANDLED CORRECTLY")
 
-test_that("Aggragated values when NULL for US", {
+test_that("US IS NULL LATER YEARS", {
 
-  w <- wicher::wiche_graduate_projections
+  w <- wicher::wiche_enrollments
 
   d <- w %>% filter(grade == "1",
                     year == 2022,
