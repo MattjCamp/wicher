@@ -1,11 +1,12 @@
 
 library(devtools)
+library(tidyverse)
 
 # download.file(url = "http://knocking.wiche.edu/s/All-Enrollment-and-Graduate-Projections-neh9.xlsx",
 #               destfile = "All-Enrollment-and-Graduate-Projections-neh9.xlsx",
 #               mode = "wb")
 
-wiche_enrollments <- wiche_ingest_enrollments("All-Enrollment-and-Graduate-Projections-neh9.xlsx")
+wiche_enrollments <- wiche_ingest_2016_enrollments("All-Enrollment-and-Graduate-Projections-neh9.xlsx")
 
 use_data(wiche_enrollments,
          overwrite = TRUE)
@@ -19,7 +20,7 @@ db_file <- system.file("wicher",
 
 conn <- init_sqlite()
 
-post_data(df = wicher::wiche_enrollments,
+post_data(df = wiche_enrollments,
           table_name = "enrollments",
           conn = conn)
 

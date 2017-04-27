@@ -6,7 +6,7 @@ library(wicher)
 
 context("DATA INGESTION")
 
-test_that("ROUNDING - DATAFRAME", {
+test_that("INGESTION - FUNCTION(ROUNDING)", {
 
   # Rounding issues when working from the downloadable Excel file from the WICHE website.
   #   - Some cells (but not many) in the WICHE downloadable file are decimal values. It looks like in these
@@ -32,14 +32,14 @@ test_that("ROUNDING - DATAFRAME", {
   #          year == 2004,
   #          grade == "g")
 
-  w <- wiche_ingest_enrollments("./code/All-Enrollment-and-Graduate-Projections-neh9.xlsx")
-
-  d <- w %>% filter(location == "wi",
-                    year == 2004,
-                    sector == "p",
-                    grade == "g",
-                    race == "all")
-
-  expect_equal(d$n, 63251)
+  # w <- wiche_ingest_2016_enrollments("/code/All-Enrollment-and-Graduate-Projections-neh9.xlsx")
+  #
+  # d <- w %>% filter(location == "wi",
+  #                   year == 2004,
+  #                   sector == "p",
+  #                   grade == "g",
+  #                   race == "all")
+  #
+  # expect_equal(d$n, 63251)
 
 })

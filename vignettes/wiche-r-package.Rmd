@@ -21,7 +21,7 @@ easier to prototype the graphics before trying to work them into the dashboard.
 
 ### Installing WICHE R Package
 
-You can install `wicher` from my github repository like
+You can install `wicher` from it's github repository like
 this:
 
 ``` r
@@ -57,7 +57,7 @@ this package. It looks like this:
 library(wicher)
 library(tidyverse)
 
-head(wiche_graduate_projections)
+head(wiche_enrollments)
 
 ```
 
@@ -86,7 +86,7 @@ show the trend in enrollments for these two groups.
 library(ggplot2)
 
 enrollments <- 
-  wiche_graduate_projections %>% 
+  wiche_enrollments %>% 
   filter(year %in% 2000:2010,
          location %in% "ca",
          race %in% c("white", "hispanic"),
@@ -131,7 +131,7 @@ First, make the chart for 2005:
 ```{r fig.width = 7, fig.height = 4, echo = TRUE}
 
 enrollments <- 
-  wiche_graduate_projections %>% 
+  wiche_enrollments %>% 
   filter(year %in% 2005,
          location %in% "ca",
          race %in% c("white", "asian", "hispanic", "native", "black"),

@@ -3,7 +3,7 @@
 library(wicher)
 library(tidyverse)
 
-head(wiche_graduate_projections)
+head(wiche_enrollments)
 
 
 ## ----fig.width = 7, fig.height = 4, echo = TRUE--------------------------
@@ -11,7 +11,7 @@ head(wiche_graduate_projections)
 library(ggplot2)
 
 enrollments <- 
-  wiche_graduate_projections %>% 
+  wiche_enrollments %>% 
   filter(year %in% 2000:2010,
          location %in% "ca",
          race %in% c("white", "hispanic"),
@@ -38,7 +38,7 @@ ggplot(enrollments, aes(x = as.character(year), y = n, group = race)) +
 ## ----fig.width = 7, fig.height = 4, echo = TRUE--------------------------
 
 enrollments <- 
-  wiche_graduate_projections %>% 
+  wiche_enrollments %>% 
   filter(year %in% 2005,
          location %in% "ca",
          race %in% c("white", "asian", "hispanic", "native", "black"),

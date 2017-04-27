@@ -9,10 +9,9 @@
 #'
 #' @param file_location where the workbook is located
 #' @export
-#' @examples
 #'
 
-wiche_ingest_enrollments <- function(file_location){
+wiche_ingest_2016_enrollments <- function(file_location){
 
   library(tidyverse)
   library(stringr)
@@ -107,7 +106,10 @@ wiche_ingest_enrollments <- function(file_location){
     w2 %>%
     filter(!location %in% c("n","s","w","m")) %>%
     group_by(year, grade, type, actual) %>%
-    summarise(n = sum(n, na.rm = FALSE)) %>%
+    # summarise(n = sum(n, na.rm = FALSE)) %>%
+    summarise(all_na = all(is.na(n)),
+              n = sum(n, na.rm = TRUE)) %>%
+    mutate(n = ifelse(all_na, NA, n)) %>%
     mutate(location = "us") %>%
     select(location, year, grade, type, actual,n) %>%
     bind_rows(w2)

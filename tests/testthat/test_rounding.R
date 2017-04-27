@@ -9,8 +9,10 @@ test_that("ROUNDING - DATAFRAME", {
 
   w <- wicher::wiche_enrollments
 
-  d <- w %>% filter(location == "wi", year == 2004,
-                    sector == "p", grade == "g",
+  d <- w %>% filter(location == "wi",
+                    year == 2004,
+                    sector == "p",
+                    grade == "g",
                     race == "all")
 
   expect_equal(d$n, 63251)
@@ -30,8 +32,10 @@ test_that("ROUNDING - SQLITE", {
 
   close_connection(conn)
 
-  d <- w %>% filter(location == "wi", year == 2004,
-                    sector == "p", grade == "g",
+  d <- w %>% filter(location == "wi",
+                    year == 2004,
+                    sector == "p",
+                    grade == "g",
                     race == "all")
 
   expect_equal(d$n, 63251)

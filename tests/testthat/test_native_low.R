@@ -5,7 +5,7 @@ library(testthat)
 
 context("TEST NATIVE ERROR FIXED")
 
-test_that("Aggragated values when NULL for US", {
+test_that("SHOULD NOT BE NULL for US", {
 
 # Getting closer but still not matching. It looks like the only differences are
 #   for United States, Public, American Indian/Alaska Native. You are having the
@@ -20,6 +20,37 @@ test_that("Aggragated values when NULL for US", {
 # Grade 11	2008_2009
 # Grade 12	2005_2006, 2009_2010, 2014_2015 to 2031_2032
 # Graduates	2005_2006, 2013_2014 to 2031_2032
+
+  # DEBUG
+
+  file_location <- "All-Enrollment-and-Graduate-Projections-neh9.xlsx"
+
+  d <-
+    wb %>%
+    filter(TYPE == "AM",
+           SURVYEAR == 2004)
+
+  d <-
+    w1 %>%
+    filter(type == "native",
+           year == 2005,
+           grade == "5")
+
+  # THIS IS THE STEP WHERE IT BROKE B/C of RM.NA
+
+  d <-
+    w2 %>%
+    filter(type == "native",
+           year == 2005,
+           grade == "5")
+
+  d <-
+    w3 %>%
+    filter(type == "native",
+           year == 2005,
+           grade == "5")
+
+  # TEST STARTS HERE
 
   w <- wicher::wiche_enrollments
 
