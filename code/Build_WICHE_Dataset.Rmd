@@ -140,7 +140,7 @@ w3 <-
   w2 %>%
   filter(!location %in% c("n","s","w","m")) %>% 
   group_by(year, grade, type, actual) %>%
-  summarise(n = sum(n, na.rm = TRUE)) %>%
+  summarise(n = sum(n, na.rm = FALSE)) %>%
   mutate(location = "us") %>%
   select(location, year, grade, type, actual,n) %>%
   bind_rows(w2)

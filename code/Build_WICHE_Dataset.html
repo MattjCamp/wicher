@@ -236,7 +236,7 @@ names(w1) &lt;- str_to_lower(names(w1))</code></pre>
   w2 %&gt;%
   filter(!location %in% c(&quot;n&quot;,&quot;s&quot;,&quot;w&quot;,&quot;m&quot;)) %&gt;% 
   group_by(year, grade, type, actual) %&gt;%
-  summarise(n = sum(n, na.rm = TRUE)) %&gt;%
+  summarise(n = sum(n, na.rm = FALSE)) %&gt;%
   mutate(location = &quot;us&quot;) %&gt;%
   select(location, year, grade, type, actual,n) %&gt;%
   bind_rows(w2)</code></pre>

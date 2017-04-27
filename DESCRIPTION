@@ -2,7 +2,7 @@ Package: wicher
 Type: Package
 Title: High school graduate forecasts from The Western Interstate Commission for
     Higher Education (WICHE) for R
-Version: 1.0.3
+Version: 1.0.4
 Author: Matt Campbell
 Maintainer: Who to complain to <mcampbell@collegeboard.org>
 Description: This contains the WICHE projects in an easy to use format in R.
