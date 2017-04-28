@@ -21,34 +21,41 @@ test_that("SHOULD NOT BE NULL for US", {
 # Grade 12	2005_2006, 2009_2010, 2014_2015 to 2031_2032
 # Graduates	2005_2006, 2013_2014 to 2031_2032
 
-  # DEBUG
-
-  file_location <- "All-Enrollment-and-Graduate-Projections-neh9.xlsx"
-
-  d <-
-    wb %>%
-    filter(TYPE == "AM",
-           SURVYEAR == 2004)
-
-  d <-
-    w1 %>%
-    filter(type == "native",
-           year == 2005,
-           grade == "5")
-
-  # THIS IS THE STEP WHERE IT BROKE B/C of RM.NA
-
-  d <-
-    w2 %>%
-    filter(type == "native",
-           year == 2005,
-           grade == "5")
-
-  d <-
-    w3 %>%
-    filter(type == "native",
-           year == 2005,
-           grade == "5")
+  # # DEBUG
+  #
+  # file_location <- "All-Enrollment-and-Graduate-Projections-neh9.xlsx"
+  #
+  # d <-
+  #   wb %>%
+  #   filter(TYPE == "AM",
+  #          SURVYEAR == 2004)
+  #
+  # d <-
+  #   w1 %>%
+  #   filter(type == "native",
+  #          year == 2005,
+  #          grade == "5")
+  #
+  # d <-
+  #   w2 %>%
+  #   filter(type == "native",
+  #          year == 2005,
+  #          grade == "5")
+  #
+  # d <-
+  #   w3 %>%
+  #   filter(type == "native",
+  #          year == 2005,
+  #          grade == "5",
+  #          location == "us")
+  #
+  # d <-
+  #   w4 %>%
+  #   filter(grade == "5",
+  #          year == 2005,
+  #          race == "native",
+  #          sector == "p",
+  #          location == "us")
 
   # TEST STARTS HERE
 
